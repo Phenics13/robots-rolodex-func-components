@@ -1,7 +1,12 @@
-import { Component } from "react";
+import { Robot } from '../../App';
+
 import './card.styles.css';
 
-const Card = ({ robot }) => {
+type CardProps = {
+    robot: Robot;
+}
+
+const Card = ({ robot }: CardProps) => {
     const { id, name, email } = robot;
     return (
         <div className='card'>

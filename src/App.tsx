@@ -1,22 +1,36 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { ChangeEvent, useEffect, useState } from 'react';
+
 import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
+import './App.css';
+
+import { getData } from './utils/data.utils';
+
+export type Robot = {
+  id: string;
+  name: string;
+  email: string;
+}
 
 const App = () => {
   const [searchField, setSearchField] = useState('');
-  const [robots, setRobots] = useState([]);
+  const [robots, setRobots] = useState<Robot[]>([]);
   const [filteredRobots, setFilteredRobots] = useState(robots);
 
-  const onSearchChange = (event) => {
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const searchField = event.target.value.toLowerCase();
     setSearchField(searchField);
   }
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(users => setRobots(users));
+    const fetchUsers = async () => {
+      const users = await getData<Robot[]>(
+        'https://jsonplaceholder.typicode.com/users'
+      );
+      setRobots(users);
+    };
+
+    fetchUsers();
   }, []);
 
   useEffect(() => {
